@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>کاتالوگ لباس</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FAF7F4;
+    --dark: #1A1A1A;
+    --charcoal: #2E2E2E;
+    --rose: #C4736A;
+    --rose-light: #F0D5D1;
+    --sand: #D4C5B2;
+    --white: #FFFFFF;
+    --shadow: rgba(0,0,0,0.12);
+  }
+
+  body {
+    font-family: 'Vazirmatn', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--dark);
+    padding: 1.5rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.04em;
+  }
+  .logo span { color: var(--rose); }
+
+  .subtitle-header {
+    font-size: 0.78rem;
+    color: var(--sand);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    display: flex;
+    gap: 0.6rem;
+    padding: 1.4rem 3rem;
+    background: var(--white);
+    border-bottom: 1px solid #EDE8E2;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 0.78rem;
+    color: #888;
+    margin-left: 0.5rem;
+    letter-spacing: 0.08em;
+  }
+
+  .filter-btn {
+    border: 1.5px solid #DDD;
+    background: transparent;
+    padding: 0.38rem 1rem;
+    border-radius: 100px;
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 0.82rem;
+    color: var(--charcoal);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--rose);
+    background: var(--rose);
+    color: var(--white);
+  }
+
+  /* ── Grid ── */
+  .grid-section {
+    padding: 2.5rem 3rem;
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .section-heading h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+  .count-badge {
+    font-size: 0.75rem;
+    background: var(--rose-light);
+    color: var(--rose);
+    padding: 0.2rem 0.7rem;
+    border-radius: 100px;
+    font-weight: 600;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+  }
+
+  .card-img-wrap {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+    background: #F0EBE5;
+  }
+
+  /* Mannequin SVG placeholder */
+  .mannequin-wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cream);
+  }
+
+  .cloth-preview {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+    position: relative;
+  }
+
+  .cloth-preview::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.35) 100%);
+  }
+
+  .tag-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--rose);
+    color: var(--white);
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    letter-spacing: 0.06em;
+    z-index: 2;
+  }
+
+  .card-info {
+    padding: 1rem 1.1rem 1.2rem;
+  }
+
+  .card-name {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 0.3rem;
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  .card-sizes {
+    display: flex;
+    gap: 4px;
+  }
+
+  .size-chip {
+    font-size: 0.65rem;
+    border: 1px solid var(--sand);
+    color: #777;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+
+  .card-price {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--rose);
+  }
+
+  /* ── Modal ── */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,12,10,0.65);
+    z-index: 200;
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    animation: fadeIn 0.2s ease;
+  }
+  .overlay.open { display: flex; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal {
+    background: var(--white);
+    border-radius: 20px;
+    max-width: 720px;
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.28);
+    animation: slideUp 0.28s ease;
+    max-height: 90vh;
+  }
+
+  @keyframes slideUp { from { transform: translateY(20px); opacity:0; } to { transform: none; opacity:1; } }
+
+  .modal-img {
+    width: 290px;
+    min-height: 360px;
+    flex-shrink: 0;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8rem;
+  }
+
+  .modal-content {
+    flex: 1;
+    padding: 2rem 2rem 2rem 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.12);
+    color: var(--white);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 10;
+  }
+  .modal-close:hover { background: rgba(0,0,0,0.3); }
+
+  .modal-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rose);
+  }
+
+  .modal-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    line-height: 1.35;
+  }
+
+  .modal-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--rose);
+  }
+
+  .divider { border: none; border-top: 1px solid #EEE; }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem 1rem;
+  }
+
+  .info-item {}
+  .info-item .label {
+    font-size: 0.7rem;
+    color: #AAA;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+  }
+  .info-item .value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .size-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .size-btn {
+    border: 1.5px solid #DDD;
+    background: transparent;
+    width: 42px;
+    height: 36px;
+    border-radius: 8px;
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    color: var(--charcoal);
+  }
+  .size-btn:hover, .size-btn.selected {
+    border-color: var(--rose);
+    background: var(--rose-light);
+    color: var(--rose);
+  }
+
+  .colors-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .color-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2.5px solid transparent;
+    cursor: pointer;
+    transition: transform 0.18s, border-color 0.18s;
+    outline: 2px solid transparent;
+  }
+  .color-dot:hover, .color-dot.selected {
+    transform: scale(1.15);
+    outline: 2px solid var(--rose);
+    outline-offset: 2px;
+  }
+
+  .add-btn {
+    margin-top: auto;
+    background: var(--charcoal);
+    color: var(--white);
+    border: none;
+    padding: 0.9rem;
+    border-radius: 12px;
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .add-btn:hover { background: var(--rose); }
+
+  .no-results {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 4rem;
+    color: #AAA;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 640px) {
+    header, .filter-bar, .grid-section { padding-right: 1.2rem; padding-left: 1.2rem; }
+    .modal { flex-direction: column; max-height: 92vh; }
+    .modal-img { width: 100%; min-height: 200px; font-size: 5rem; }
+    .grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">MODE<span>.</span></div>
+  <div class="subtitle-header">کاتالوگ لباس</div>
+</header>
+
+<div class="filter-bar">
+  <span class="filter-label">دسته‌بندی:</span>
+  <button class="filter-btn active" data-filter="all">همه</button>
+  <button class="filter-btn" data-filter="casual">کژوال</button>
+  <button class="filter-btn" data-filter="formal">رسمی</button>
+  <button class="filter-btn" data-filter="sport">ورزشی</button>
+  <button class="filter-btn" data-filter="traditional">سنتی</button>
+</div>
+
+<section class="grid-section">
+  <div class="section-heading">
+    <h2>محصولات</h2>
+    <span class="count-badge" id="count">۸ مدل</span>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<!-- Modal -->
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-img" id="modal-img"></div>
+    <div class="modal-content" style="position:relative;">
+      <button class="modal-close" onclick="closeModal(null, true)">✕</button>
+      <div class="modal-tag" id="modal-tag"></div>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-price" id="modal-price"></div>
+      <hr class="divider">
+      <div class="info-grid" id="modal-info"></div>
+      <hr class="divider">
+      <div>
+        <div class="label" style="font-size:0.7rem;color:#AAA;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.5rem;">سایز</div>
+        <div class="size-row" id="modal-sizes"></div>
+      </div>
+      <div>
+        <div class="label" style="font-size:0.7rem;color:#AAA;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.5rem;">رنگ</div>
+        <div class="colors-row" id="modal-colors"></div>
+      </div>
+      <button class="add-btn">افزودن به سبد خرید</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const items = [
+  {
+    id: 1, emoji: '👗', category: 'casual',
+    name: 'پیراهن کتان ساده', tag: 'پرفروش',
+    price: '۴۸۰,۰۰۰', code: 'DR-001',
+    fabric: 'کتان ۱۰۰٪', origin: 'ایران', season: 'بهار / تابستان',
+    care: 'شستشو دستی', weight: '۱۸۰ گرم', stock: '۲۴ عدد',
+    sizes: ['XS','S','M','L','XL'],
+    colors: ['#C4736A','#D4C5B2','#3D3D3D','#FFFFFF'],
+    desc: 'پیراهن روزانه با پارچه نفس‌کش کتان، مناسب برای فصل گرم.'
+  },
+  {
+    id: 2, emoji: '🧥', category: 'formal',
+    name: 'کت رسمی مردانه', tag: 'جدید',
+    price: '۱,۲۵۰,۰۰۰', code: 'CT-002',
+    fabric: 'پشم و پلی‌استر', origin: 'ترکیه', season: 'پاییز / زمستان',
+    care: 'خشک‌شویی', weight: '۶۵۰ گرم', stock: '۱۲ عدد',
+    sizes: ['M','L','XL','2XL'],
+    colors: ['#1A1A1A','#2E4A6B','#6B4A2E'],
+    desc: 'کت رسمی با برش اروپایی، مناسب جلسات کاری و مراسم.'
+  },
+  {
+    id: 3, emoji: '👚', category: 'casual',
+    name: 'تیشرت اوورسایز', tag: 'تخفیف',
+    price: '۲۲۰,۰۰۰', code: 'TS-003',
+    fabric: 'پنبه ۱۰۰٪', origin: 'ایران', season: 'تمام فصل',
+    care: 'ماشین ۳۰°', weight: '۲۲۰ گرم', stock: '۵۶ عدد',
+    sizes: ['S','M','L','XL','2XL'],
+    colors: ['#F5F0E8','#C4736A','#4A7A6B','#2E2E2E'],
+    desc: 'تیشرت اوورسایز راحت با جنس نخ برزیلی با دوخت محکم.'
+  },
+  {
+    id: 4, emoji: '🩱', category: 'sport',
+    name: 'لگ ورزشی زنانه', tag: 'پرفروش',
+    price: '۳۸۰,۰۰۰', code: 'SP-004',
+    fabric: 'نایلون / اسپاندکس', origin: 'چین', season: 'تمام فصل',
+    care: 'ماشین ۴۰°', weight: '۱۴۰ گرم', stock: '۸۰ عدد',
+    sizes: ['XS','S','M','L'],
+    colors: ['#1A1A1A','#C4736A','#2E4A6B','#4A7A6B'],
+    desc: 'لگ با تکنولوژی رطوبت‌گیر، مناسب یوگا، پیلاتس و تمرین.'
+  },
+  {
+    id: 5, emoji: '👘', category: 'traditional',
+    name: 'بلوز سوزن‌دوزی', tag: 'ویژه',
+    price: '۸۵۰,۰۰۰', code: 'TR-005',
+    fabric: 'ابریشم مصنوعی', origin: 'ایران - کرمان', season: 'بهار / تابستان',
+    care: 'شستشو دستی', weight: '۲۴۰ گرم', stock: '۸ عدد',
+    sizes: ['S','M','L'],
+    colors: ['#8B1A4A','#C4736A','#2E4A6B'],
+    desc: 'بلوز با گلدوزی دست بومی، اثر هنرمندان کرمانی.'
+  },
+  {
+    id: 6, emoji: '🧣', category: 'casual',
+    name: 'شلوار جین زاپدار', tag: 'جدید',
+    price: '۵۶۰,۰۰۰', code: 'JN-006',
+    fabric: 'دنیم ۹۸٪ / اسپاندکس ۲٪', origin: 'بنگلادش', season: 'تمام فصل',
+    care: 'ماشین ۳۰°', weight: '۵۸۰ گرم', stock: '۳۲ عدد',
+    sizes: ['28','30','32','34','36'],
+    colors: ['#2E3F5C','#5C6A7A','#1A1A1A'],
+    desc: 'جین اسلیم فیت با دنیم با کیفیت ترکی، راحت و بادوام.'
+  },
+  {
+    id: 7, emoji: '🥋', category: 'sport',
+    name: 'تاپ ورزشی', tag: null,
+    price: '۲۸۰,۰۰۰', code: 'SP-007',
+    fabric: 'پلی‌استر / اسپاندکس', origin: 'ایران', season: 'بهار / تابستان',
+    care: 'ماشین ۴۰°', weight: '۸۰ گرم', stock: '۴۵ عدد',
+    sizes: ['XS','S','M','L'],
+    colors: ['#1A1A1A','#FFFFFF','#C4736A'],
+    desc: 'تاپ ورزشی یقه‌دار با پشتیبانی مناسب، ضد عرق.'
+  },
+  {
+    id: 8, emoji: '🎩', category: 'formal',
+    name: 'پالتو زنانه کلاسیک', tag: 'لاکچری',
+    price: '۲,۱۰۰,۰۰۰', code: 'CT-008',
+    fabric: 'کشمیر ۴۰٪ / پشم ۶۰٪', origin: 'ایتالیا', season: 'پاییز / زمستان',
+    care: 'خشک‌شویی', weight: '۱,۱۰۰ گرم', stock: '۵ عدد',
+    sizes: ['S','M','L','XL'],
+    colors: ['#D4C5B2','#1A1A1A','#8B1A4A'],
+    desc: 'پالتو کلاسیک با پارچه درجه یک ایتالیایی، گرم و شیک.'
+  }
+];
+
+const catMap = { all:'همه', casual:'کژوال', formal:'رسمی', sport:'ورزشی', traditional:'سنتی' };
+let activeFilter = 'all';
+
+function renderGrid() {
+  const filtered = activeFilter === 'all' ? items : items.filter(i => i.category === activeFilter);
+  const grid = document.getElementById('grid');
+  const count = document.getElementById('count');
+  const digits = {'0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹'};
+  const toFa = n => String(n).replace(/[0-9]/g, d => digits[d]);
+  count.textContent = toFa(filtered.length) + ' مدل';
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="no-results">محصولی در این دسته‌بندی یافت نشد</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(item => `
+    <div class="card" onclick="openModal(${item.id})">
+      ${item.tag ? `<div class="tag-badge">${item.tag}</div>` : ''}
+      <div class="card-img-wrap">
+        <div class="cloth-preview">${item.emoji}</div>
+      </div>
+      <div class="card-info">
+        <div class="card-name">${item.name}</div>
+        <div class="card-meta">
+          <div class="card-sizes">
+            ${item.sizes.slice(0,3).map(s => `<span class="size-chip">${s}</span>`).join('')}
+            ${item.sizes.length > 3 ? `<span class="size-chip">+${item.sizes.length-3}</span>` : ''}
+          </div>
+          <div class="card-price">${item.price} ت</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openModal(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+
+  document.getElementById('modal-img').textContent = item.emoji;
+  document.getElementById('modal-tag').textContent = catMap[item.category] + (item.tag ? ' · ' + item.tag : '');
+  document.getElementById('modal-title').textContent = item.name;
+  document.getElementById('modal-price').textContent = item.price + ' تومان';
+
+  document.getElementById('modal-info').innerHTML = [
+    ['کد محصول', item.code], ['پارچه', item.fabric],
+    ['منشأ', item.origin], ['فصل', item.season],
+    ['نحوه نگهداری', item.care], ['وزن', item.weight],
+    ['موجودی', item.stock], ['توضیحات', item.desc]
+  ].map(([k,v]) => `
+    <div class="info-item">
+      <div class="label">${k}</div>
+      <div class="value">${v}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('modal-sizes').innerHTML = item.sizes.map((s,i) =>
+    `<button class="size-btn ${i===0?'selected':''}" onclick="selectSize(this)">${s}</button>`
+  ).join('');
+
+  document.getElementById('modal-colors').innerHTML = item.colors.map((c,i) =>
+    `<div class="color-dot ${i===0?'selected':''}" style="background:${c}" onclick="selectColor(this)" title="${c}"></div>`
+  ).join('');
+
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function selectSize(el) {
+  el.closest('.size-row').querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectColor(el) {
+  el.closest('.colors-row').querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function closeModal(e, force) {
+  if (force || e?.target === document.getElementById('overlay')) {
+    document.getElementById('overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    renderGrid();
+  });
+});
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(null, true); });
+
+renderGrid();
+</script>
+</body>
+</html>
